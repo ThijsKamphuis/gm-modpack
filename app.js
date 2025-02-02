@@ -13,19 +13,16 @@ if (zipFile) {
 }
 
 const zipFilePath = path.join(__dirname, zipname + ".zip");
-app.use((req, res, next) => {
-    res.on("close", () => {
-        if (!res.headersSent) {
-            console.log("Download canceled by the user");
-        }
-    });
-    next();
-});
+
 app.get("/download", (req, res) => {
     res.download(zipFilePath, `${zipname}.zip`, (err) => {
         if (err) {
-            console.error("Error sending file:", err);
-            res.status(500).send("Error downloading file");
+            if (err.code === "ECONNABORTED") {
+                console.warn("Client aborted the download.");
+            } else {
+                console.error("Error sending file:", err);
+                res.status(500).send("Error downloading file");
+            }
         }
         console.log(req.ip);
     });
