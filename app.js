@@ -15,6 +15,7 @@ if (zipFile) {
 const zipFilePath = path.join(__dirname, zipname + ".zip");
 
 app.get("/download", (req, res) => {
+    res.send("<h1>Welcome to the File Server</h1>");
     res.download(zipFilePath, `${zipname}.zip`, (err) => {
         if (err) {
             console.error("Error sending file:", err);
