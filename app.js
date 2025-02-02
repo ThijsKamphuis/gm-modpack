@@ -13,7 +13,14 @@ if (zipFile) {
 }
 
 const zipFilePath = path.join(__dirname, zipname + ".zip");
-
+app.use((req, res, next) => {
+    res.on("close", () => {
+        if (!res.headersSent) {
+            console.log("Download canceled by the user");
+        }
+    });
+    next();
+});
 app.get("/download", (req, res) => {
     res.download(zipFilePath, `${zipname}.zip`, (err) => {
         if (err) {
