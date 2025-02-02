@@ -22,7 +22,6 @@ app.get("/download", (req, res) => {
         }
         console.log(req.ip);
     });
-    res.send("<h1>Welcome to the File Server</h1>");
 });
 
 app.listen(PORT, () => {
